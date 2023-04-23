@@ -21,11 +21,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 5000;
 
-app.get('/', (req: any, res: { send: (arg0: string) => void }) => {
+app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-io.on('connection', (socket: any) => {
+io.on('connection', (socket) => {
   console.log('a user connected');
   socket.emit('me', socket.id);
   socket.on('disconnect', () => {
@@ -33,28 +33,15 @@ io.on('connection', (socket: any) => {
     console.log('user disconnected');
   });
 
-  socket.on(
-    'calluser',
-    ({
-      userToCall,
-      signalData,
+  socket.on('calluser', ({ userToCall, signalData, from, name }) => {
+    io.to(userToCall).emit('calluser', {
+      signal: signalData,
       from,
       name,
-    }: {
-      userToCall: string;
-      signalData: any;
-      from: string;
-      name: string;
-    }) => {
-      io.to(userToCall).emit('calluser', {
-        signal: signalData,
-        from,
-        name,
-      });
-    }
-  );
+    });
+  });
 
-  socket.on('answercall', (data: any) => {
+  socket.on('answercall', (data) => {
     io.to(data.to).emit('callaccepted', data.signal);
   });
 });

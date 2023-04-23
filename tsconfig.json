@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "context/SocketContext.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "context/SocketContext.tsx", "server.js"],
   "exclude": ["node_modules"]
 }
